@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minecraft Server</title>
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('assets/background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      animation: fadeIn 1.5s ease;
+    }
+
+    header {
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideDown 1s ease-out;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    nav a {
+      margin: 0 10px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #00ffcc;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 50px 30px;
+      flex-wrap: wrap;
+      animation: fadeInUp 1.5s ease;
+    }
+
+    .content {
+      max-width: 600px;
+    }
+
+    .content h2 {
+      font-size: 1.2rem;
+      color: #ffeb3b;
+      animation: pulse 2s infinite;
+    }
+
+    .content h1 {
+      font-size: 4rem;
+      margin: 10px 0;
+      font-family: "Permanent Marker", cursive;
+      color: #ffffff;
+    }
+
+    .content p {
+      margin: 20px 0;
+      line-height: 1.6;
+      color: #eee;
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    .buttons button {
+      margin-right: 15px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: popIn 1s ease;
+    }
+
+    .buttons .play {
+      background-color: #00e676;
+      color: black;
+      box-shadow: 0 0 15px #00e676;
+    }
+
+    .buttons .discord {
+      background-color: transparent;
+      color: white;
+      border: 2px solid #00e5ff;
+    }
+
+    .buttons button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #00ffcc;
+    }
+
+    /* Blurred Overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    /* Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 90%;
+      max-width: 600px;
+      transform: translate(-50%, -50%);
+      background: rgba(20, 20, 40, 0.95);
+      padding: 30px;
+      border-radius: 20px;
+      z-index: 1000;
+      color: #fff;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+      animation: zoomIn 0.5s ease;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+      color: #ff4081;
+    }
+
+    .popup ul {
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    .copy-group {
+      margin: 10px 0;
+    }
+
+    .copy-group input {
+      background: #222;
+      border: 1px solid #555;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 6px;
+      width: 60%;
+    }
+
+    .copy-group button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      background: #00c853;
+      color: white;
+      cursor: pointer;
+    }
+
+    .close-btn {
+      background-color: #6200ea;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      margin-top: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .close-btn:hover {
+      background-color: #7e57c2;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.8) translate(-50%, -50%); opacity: 0; }
+      to { transform: scale(1) translate(-50%, -50%); opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .popup {
+        padding: 20px;
+      }
+
+      .copy-group input {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+
+      .copy-group button {
+        margin: 5px 0 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Ender Forge</h1>
+    <nav>
+      <a href="#">Games</a>
+      <a href="#">Reviews</a>
+      <a href="#">FAQ</a>
+      <a href="#">Chat</a>
+      <a href="#" style="border: 1px solid white; padding: 5px 10px; border-radius: 10px;">Download</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="content">
+      <h2>#1 Trending</h2>
+      <h1>MINECRAFT</h1>
+      <p>Join our Ender Forge Smp Minecraft server with strict rules to ensure fair gameplay and fun for everyone!</p>
+      <div class="buttons">
+        <button class="play" onclick="showRules()">Play Now</button>
+        <button class="discord" onclick="window.open('https://discord.gg/vMycYYrgsz')">Join Discord</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blurred overlay -->
+  <div class="overlay" id="overlay" onclick="closeRules()"></div>
+
+  <!-- Rules Popup -->
+  <div class="popup" id="rulesPopup">
+    <h2>📌 Server Details</h2>
+
+    <div class="copy-group">
+      <label>Java IP:</label><br>
+      <input type="text" value="147.185.221.29:1452" id="javaIp" readonly>
+      <button onclick="copyText('javaIp')">Copy</button>
+    </div>
+
+    <div class="copy-group">
+      <label>Bedrock IP:</label><br>
+      <input type="text" value="147.185.221.27" id="bedrockIp" readonly>
+      <button onclick="copyText('bedrockIp')">Copy</button>
+    </div>
+
+    <div class="copy-group">
+      <label>Bedrock Port:</label><br>
+      <input type="text" value="1589" id="bedrockPort" readonly>
+      <button onclick="copyText('bedrockPort')">Copy</button>
+    </div>
+
+    <h2>🔧 Mod ব্যবহারের নিয়মাবলী</h2>
+    <p><strong>অনুমোদিত Mod:</strong></p>
+    <ul>
+      <li>OptiFine (পারফরম্যান্স)</li>
+      <li>MiniMap (সার্ভার অনুমতি হলে)</li>
+      <li>HUD Enhancements (FPS, কো-অর্ডিনেট)</li>
+      <li>Shaders (ভিজ্যুয়াল পরিবর্তন)</li>
+    </ul>
+
+    <p><strong>নিষিদ্ধ Mod:</strong></p>
+    <ul>
+      <li>X-ray</li>
+      <li>Kill Aura</li>
+      <li>Auto Clicker</li>
+      <li>Fly Mod</li>
+      <li>Speed Hack</li>
+      <li>Chest ESP</li>
+    </ul>
+
+    <p><strong>সতর্কতা:</strong><br>চিটিং Mod ব্যবহারে একাউন্ট স্থায়ী নিষিদ্ধ হতে পারে।</p>
+
+    <button class="close-btn" onclick="closeRules()">❌ Close</button>
+  </div>
+
+  <!-- Audio -->
+  <audio id="popupSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7d29e38fd0.mp3" preload="auto"></audio>
+
+  <script>
+    function showRules() {
+      document.getElementById('rulesPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popupSound').play();
+    }
+
+    function closeRules() {
+      document.getElementById('rulesPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function copyText(id) {
+      const input = document.getElementById(id);
+      input.select();
+      input.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      alert("Copied: " + input.value);
+    }
+  </script>
+
+</body>
+</html>
